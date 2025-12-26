@@ -16,7 +16,7 @@ SmartHoops Frontend adalah antarmuka pengguna (*user interface*) modern berbasis
 
 ---
 
-## 🛠️ Instalasi & Persiapan
+##  Instalasi & Persiapan
 
 ### 1. Prasyarat
 
