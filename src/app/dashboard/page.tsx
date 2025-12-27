@@ -25,7 +25,6 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Ambil session user
     const userJson = localStorage.getItem('user');
     const token = localStorage.getItem('token');
 
@@ -36,21 +35,29 @@ export default function DashboardPage() {
 
     setUser(JSON.parse(userJson));
 
-    // Sinkronisasi data dashboard
     const loadData = async () => {
       try {
         setLoading(true);
-        const [resPemain, resKriteria, resPenilaian] = await Promise.all([
+        const [resPemain, resKriteria, resStatus] = await Promise.all([
           api.pemain.getAll(),
           api.kriteria.getAll(),
-          api.penilaian.getAggregated() // Data gabungan multi-evaluator
+          api.penilaian.getStatus()
         ]);
+
+        // Pastikan resStatus.data adalah Array sebelum di-filter
+        const dataStatus = Array.isArray(resStatus.data) ? resStatus.data : [];
+
+        const jumlahSelesai = dataStatus.filter(
+          (item: any) => item.status_penilaian === 'Selesai'
+        ).length;
 
         setStats({
           pemain: resPemain.data?.length || 0,
-          kriteria: resKriteria.data?.length || 12,
-          sudahDinilai: resPenilaian.data?.length || 0
+          kriteria: resKriteria.data?.length || 0,
+          sudahDinilai: jumlahSelesai 
         });
+      } catch (err) {
+        console.error("Gagal sinkronisasi dashboard:", err);
       } finally {
         setLoading(false);
       }
@@ -86,12 +93,12 @@ export default function DashboardPage() {
       <div className="grid grid-cols-4 gap-6">
         <StatCard icon={<Users size={20} />} label="TOTAL ATLET" value={stats.pemain} color="blue" />
         <StatCard icon={<ClipboardCheck size={20} />} label="KRITERIA" value={stats.kriteria} color="slate" />
+        {/* PENILAIAN: Menampilkan atlet yang status konsensusnya Selesai (36 data masuk) */}
         <StatCard icon={<UserCheck size={20} />} label="PENILAIAN" value={stats.sudahDinilai} color="orange" />
-        <StatCard icon={<Trophy size={20} />} label="RANKING" value="READY" color="green" />
+        <StatCard icon={<Trophy size={20} />} label="RANKING" value={stats.sudahDinilai > 0 ? "READY" : "WAIT"} color="green" />
       </div>
 
       <div className="grid grid-cols-3 gap-8">
-        {/* PROGRESS SECTION */}
         <div className="col-span-2 bg-white rounded-3xl p-8 border border-slate-100 shadow-sm">
           <div className="flex items-center gap-3 mb-10">
             <div className="p-2 bg-slate-900 rounded-lg text-white">
@@ -103,7 +110,12 @@ export default function DashboardPage() {
           <div className="space-y-6 mb-10">
             <StepItem num="01" title="DATA ATLET" status="SELESAI" isDone={stats.pemain > 0} />
             <StepItem num="02" title="KONSENSUS AHP" status="AKTIF" isDone={true} />
-            <StepItem num="03" title="PENILAIAN" status="PROSES" isDone={stats.sudahDinilai > 0} />
+            <StepItem 
+              num="03" 
+              title="PENILAIAN" 
+              status={stats.sudahDinilai === stats.pemain && stats.pemain > 0 ? "SELESAI" : "PROSES"} 
+              isDone={stats.sudahDinilai === stats.pemain && stats.pemain > 0} 
+            />
           </div>
 
           <Link href="/dashboard/ranking" className="flex items-center justify-between p-6 bg-blue-600 rounded-2xl text-white hover:bg-blue-700 transition-all">
@@ -119,6 +131,7 @@ export default function DashboardPage() {
   );
 }
 
+// Komponen StatCard & StepItem tetap sama seperti sebelumnya...
 function StatCard({ icon, label, value, color }: any) {
   const colors: any = {
     blue: "text-blue-600 bg-blue-50",
