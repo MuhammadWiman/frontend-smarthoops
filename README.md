@@ -1,37 +1,79 @@
-This is a [Next.js](https://nextjs.org) project tailwind css with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
 
-First, run the development server:
+# SmartHoops - Frontend Web Application 
+
+SmartHoops Frontend adalah antarmuka pengguna (*user interface*) modern berbasis Next.js yang dirancang untuk sistem pendukung keputusan (SPK) seleksi atlet basket menggunakan metode **Analytic Hierarchy Process (AHP)**. Aplikasi ini menyediakan dashboard interaktif bagi pelatih untuk melakukan penilaian performa dan bagi admin untuk mengelola data master kriteria serta atlet.
+
+---
+
+##  Fitur Utama 
+
+* **Dashboard & Statistik**: Ringkasan data atlet, jumlah kriteria, dan status penilaian terbaru secara visual.
+* **Role-Based Access Control (RBAC)**: Navigasi sidebar dinamis yang membatasi hak akses antara Admin (Manajemen Data) dan Pelatih (Penilai AHP).
+* **Manajemen Data Atlet & Kriteria**: Pengelolaan lengkap profil pemain basket dan 12 kriteria penilaian skill serta fisik.
+* **Matriks Perbandingan AHP**: Antarmuka penilaian berpasangan 12x12 yang user-friendly dengan perhitungan nilai kebalikan (*reciprocal*) otomatis.
+* **Ranking & Hasil Seleksi**: Visualisasi hasil akhir perangkingan atlet berdasarkan bobot konsensus multi-evaluator.
+
+---
+
+##  Instalasi & Persiapan
+
+### 1. Prasyarat
+
+* Node.js (v20+)
+* NPM / Yarn / Bun
+
+### 2. Cloning Project
+
+```bash
+git clone https://github.com/MuhammadWiman/frontend-smarthoops.git
+cd frontend-smarthoops
+
+```
+
+### 3. Instalasi Dependensi
+
+```bash
+npm install
+
+```
+
+### 4. Konfigurasi Environment
+
+Buat file `.env.local` di root folder dan arahkan ke URL API Backend Anda:
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:5000/api
+
+```
+
+### 5. Menjalankan Project
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Aplikasi akan tersedia di `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+##  Arsitektur Teknologi 
 
-## Learn More
+* **Framework**: Next.js 14 (App Router).
+* **Styling**: Tailwind CSS untuk UI yang responsif dan modern.
+* **Icons**: Lucide React untuk elemen visual navigasi.
+* **State Management**: React Hooks (useState, useEffect) untuk pengelolaan data lokal.
+* **API Integration**: Axios/Fetch untuk komunikasi asinkron dengan REST API Backend.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📂 Struktur Folder Utama
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+* `src/app/(dashboard)`: Berisi seluruh rute halaman fungsional (Pemain, Kriteria, Bobot, Ranking).
+* `src/components`: Komponen UI modular seperti Sidebar, Navbar, dan Tabel Matriks.
+* `src/lib/api.ts`: Konfigurasi *endpoint* dan *request handler* terpusat.
+* `src/types`: Definisi kontrak data (interface) untuk konsistensi TypeScript.
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-"# frontend-smarthoops" 
