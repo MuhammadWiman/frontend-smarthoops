@@ -32,6 +32,7 @@ export interface Kriteria {
   id_kriteria: number;
   nama_kriteria: string;
   kelompok: 'skill' | 'fisik'; // Kriteria dibagi 2 kelompok [cite: 44]
+  tipe: 'benefit' | 'cost'; // Tipe kriteria AHP [cite: 47]
   deskripsi?: string;
 }
 
@@ -79,6 +80,7 @@ export interface Ranking {
   ranking: number;
   id_pemain: number;
   nama_pemain: string;
+  posisi: string;
   nilai_akhir: number; // Hasil perkalian bobot & skor rata-rata [cite: 79]
 }
 
